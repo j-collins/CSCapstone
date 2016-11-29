@@ -4,7 +4,10 @@ Created by Naman Patwari on 10/4/2016.
 """
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
-from .models import MyUser
+from .models import MyUser, Student, Professor, Engineer
+
+#Import USER_TYPES
+from .models import USER_TYPES
 
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
@@ -19,7 +22,11 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput, required=True)    
 
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=False)
-    lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)               
+    lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
+
+
+    #Add user_type to the registration form. Drop-down selection.
+    user_type = forms.ChoiceField(choices = USER_TYPES, required=True)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -76,7 +83,21 @@ class UpdateForm(forms.ModelForm):
             return email[:email.find("@")]      
         return first_name
    
+#Add Meta to update the profiles.
+class StudentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        exclude = ['user']
 
+class ProfessorUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Professor
+        exclude = ['user']
+
+class EngineerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Engineer
+        exclude = ['user']
 
 """Admin Forms"""
 

@@ -8,6 +8,9 @@
 	<div class="panel panel-default">
 		<form method="POST" class="panel-body validate"> {% csrf_token %}
 			{{ form.as_p }}
+			{{ student_form.as_p }}
+			{{ professor_form.as_p }}
+			{{ engineer_form.as_p }}
 			<input type="submit" class='btn btn-primary' value="{{ button_value }}">
 		</form>
 	</div>
