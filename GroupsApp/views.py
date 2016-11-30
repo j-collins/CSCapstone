@@ -56,8 +56,8 @@ def getGroupFormSuccess(request):
 
 def joinGroup(request):
     if request.user.is_authenticated():
-        in_name = request.GET.get('name', 'None')
-        in_group = models.Group.objects.get(name__exact=in_name)
+        in_email = request.GET.get('email', 'None')
+        in_group = models.Group.objects.get(email__exact=in_email)
         in_group.members.add(request.user)
         in_group.save();
         request.user.group_set.add(in_group)

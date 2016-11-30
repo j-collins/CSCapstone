@@ -53,8 +53,8 @@ def auth_register(request):
 	
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():
-		print form.cleaned_data
-		print form.cleaned_data['user_type']
+		print(form.cleaned_data) #added brackets - shubhika
+		print(form.cleaned_data['user_type']) #added brackets - shubhika
 
 		#Creating a new user, adding user_type.
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
