@@ -33,7 +33,9 @@ def getCompany(request):
 
 def getCompanyForm(request):
     if request.user.is_authenticated():
-        if request.user.is_engineer:
+        user_type = request.user.get_user_type()
+        print(user_type)
+        if user_type == 'ENGINEER':
             return render(request, 'companyform.html')
     # render error page if user is not logged in
     return render(request, 'autherror.html')

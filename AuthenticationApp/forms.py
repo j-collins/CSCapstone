@@ -90,6 +90,23 @@ class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
         exclude = ['user']
+        def clean_skills(self):
+            skills = self.cleaned_data.get("skills")
+            if skills == self.initial["skills"]:
+                return skills
+            try:
+                return skills
+            except:
+                raise forms.ValidationError("There was an error, please contact us later")
+
+        def clean_experience(self):
+            experience = self.cleaned_data.get("experience")
+            if experience == self.initial["experience"]:
+                return experience
+            try:
+                return experience
+            except:
+                raise forms.ValidationError("There was an error, please contact us later")
 
 
 class ProfessorUpdateForm(forms.ModelForm):

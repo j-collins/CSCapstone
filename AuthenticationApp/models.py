@@ -126,6 +126,8 @@ class Student(models.Model):
         MyUser,
         on_delete=models.CASCADE,
         primary_key=True)
+    skills = models.CharField(max_length=120, null=True, blank=True)
+    experience =  models.CharField(max_length=120, null=True, blank=True)
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
@@ -145,8 +147,10 @@ class Student(models.Model):
 
     def has_module_perms(self, app_label):        
         return True
-
-
+    def get_experience(self):
+        return self.experience
+    def get_skills(self):
+        return self.skills
     @property
     def is_staff(self):
         return False
