@@ -33,9 +33,18 @@ class MyUserManager(BaseUserManager):
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
             user.first_name = email[:email.find("@")]
-        
+
+        if user_type == 'STUDENT':
+            user.is_student = True
+        if user_type == 'ENGINEER':
+            user.is_professor = True
+        if user_type == 'PROFESSOR':
+            is_engineer = True
+
+
         user.save(using=self._db)
         return user
+
 
     def create_superuser(self, email=None, password=None, first_name=None, last_name=None):
         user = self.create_user(email, password=password, first_name=first_name, last_name=last_name)
@@ -71,9 +80,9 @@ class MyUser(AbstractBaseUser):
 
 
     # #New fields added
-    # is_student = models.BooleanField(default=False,)
-    # is_professor = models.BooleanField(default=False,)
-    # is_engineer = models.BooleanField(default=False,)    
+    is_student = models.BooleanField(default=False,)
+    is_professor = models.BooleanField(default=False,)
+    is_engineer = models.BooleanField(default=False,)
 
     objects = MyUserManager()
 
@@ -129,6 +138,7 @@ class Student(models.Model):
 
     def __unicode__(self):           # Python 2
         return self.user.email
+
 
     def has_perm(self, perm, obj=None):
         return True
