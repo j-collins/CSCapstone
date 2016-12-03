@@ -9,3 +9,4 @@ class GroupForm(forms.Form):
     description = forms.CharField(label='Description', max_length=300)
 class AddUserForm(forms.Form):
     email = forms.CharField(label='Email', max_length=30)
+    group = forms.CharField(label='Email', max_length=30)

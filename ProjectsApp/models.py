@@ -7,9 +7,9 @@ from CompaniesApp.models import Company
 from AuthenticationApp.models import MyUser, Engineer
 class Project(models.Model):
     name = models.CharField(max_length=200)
-    description = models.CharField(max_length=10000)
-    created_at = models.DateTimeField('date created')
-    updated_at = models.DateTimeField('date updated')
+    description = models.CharField(max_length=10000, default='')
+    created_at = models.DateTimeField('date created', default='2000-10-10')
+    updated_at = models.DateTimeField('date updated', default='2000-10-10')
     company =models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, null=True)
     programming_language = models.CharField(max_length=1000, default='')

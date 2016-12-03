@@ -10,8 +10,8 @@ urlpatterns = [
     url(r'^group/all$', views.getGroups, name='Groups'),
 	url(r'^group/form$', views.getGroupForm, name='GroupForm'),
     url(r'^group/formsuccess$', views.getGroupFormSuccess, name='GroupFormSuccess'),
-    url(r'^group/addstudent$', views.addStudent, name='GJoin'),
-    url(r'^group/join$', views.getAddUserSuccess, name='AddUserSuccess'),
+    url(r'^group/join$', views.addStudent, name='GJoin'),
+    url(r'^group/success$', views.getAddUserSuccess, name='GJoin2'),
     url(r'^group/unjoin$', views.unjoinGroup, name='GUnjoin'),
     url(r'^group$', views.getGroup, name='Group'),
 ]

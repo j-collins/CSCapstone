@@ -80,21 +80,22 @@ def getAddUserSuccess(request):
                 if form.is_valid():
 
                     if models.MyUser.objects.filter(email__exact=form.cleaned_data['email']).exists():
-                        new_user = models.MyUser.objects.get(email__exact=form.cleaned_data['email'])
-                        print(new_user)
-                        if new_user.is_student:
-                            in_name = request.GET.get('name')
-                            print(in_name)
-                            in_group = models.Group.objects.get(name__exact=in_name)
-                            in_group.members.add(request.user)
-                            in_group.save()
-                            new_user.group_set.add(new_group)
-                            new_user.save()
-                            context = {
-                                'group': in_group,
-                            'userIsMember': True,
-                            }
-                        return render(request, 'addusersuccess.html', context1)
+                        if models.Group.objects.filter(name__exact=form.cleaned_data['group']).exists():
+                            new_user = models.MyUser.objects.get(email__exact=form.cleaned_data['email'])
+                            print(new_user)
+                            in_group = models.Group.objects.get(name__exact=form.cleaned_data['group'])
+                            if new_user.is_student:                             #NEED TO CHECK IF REQUEST.USER IS A MEMBER OF THE GROUP
+                                in_name = request.GET.get('name')               #need to check if the user to be added is already a member or not
+                                print(in_name)
+                                in_group.members.add(request.user)
+                                in_group.save()
+                                new_user.group_set.add(in_group)
+                                new_user.save()
+                                context = {
+                                    'group': in_group,
+                                    'userIsMember': True,
+                                }
+                                return render(request, 'addformsuccess.html', context)
                     return render(request, 'adduserform.html', {'error' : 'User is not a Student! Only Students can be added to a Group!!!'})
     # render error page if user is not logged in
     return render(request, 'autherror.html')

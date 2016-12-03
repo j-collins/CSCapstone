@@ -33,7 +33,8 @@ def getCompany(request):
 
 def getCompanyForm(request):
     if request.user.is_authenticated():
-        return render(request, 'companyform.html')
+        if request.user.is_engineer:
+            return render(request, 'companyform.html')
     # render error page if user is not logged in
     return render(request, 'autherror.html')
 
