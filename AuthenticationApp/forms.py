@@ -5,7 +5,10 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
 from .models import MyUser, Student, Professor, Engineer
 
-# Import USER_TYPES
+#Import TinyMCE.
+from tinymce.widgets import TinyMCE
+
+#Import USER_TYPES.
 from .models import USER_TYPES
 
 
@@ -87,9 +90,14 @@ class UpdateForm(forms.ModelForm):
 
 # Add Meta to update the profiles.
 class StudentUpdateForm(forms.ModelForm):
+
+    #Make the about field use the tinyMCE editor.
+    about = forms.CharField(widget=TinyMCE())
+
     class Meta:
         model = Student
         exclude = ['user']
+
         def clean_skills(self):
             skills = self.cleaned_data.get("skills")
             if skills == self.initial["skills"]:
@@ -110,12 +118,20 @@ class StudentUpdateForm(forms.ModelForm):
 
 
 class ProfessorUpdateForm(forms.ModelForm):
+
+    #Make the about field use the tinyMCE editor.
+    about = forms.CharField(widget=TinyMCE())
+
     class Meta:
         model = Professor
         exclude = ['user']
 
 
 class EngineerUpdateForm(forms.ModelForm):
+
+    #Make the about field use the tinyMCE editor.
+    about = forms.CharField(widget=TinyMCE())
+
     class Meta:
         model = Engineer
         exclude = ['user']

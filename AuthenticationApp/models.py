@@ -129,6 +129,9 @@ class Student(models.Model):
     skills = models.CharField(max_length=120, null=True, blank=True)
     experience =  models.CharField(max_length=120, null=True, blank=True)
 
+    #Add an about field for the student. This will use the tinyMCE editor.
+    about = models.TextField(null=True, blank=True)
+
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -167,6 +170,9 @@ class Professor(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(max_length=15, validators=[phone_regex], blank=True) # validators should be a list
 
+    #Add an about field for the professor. This will use the tinyMCE editor.
+    about = models.TextField(null=True, blank=True)
+
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -201,6 +207,9 @@ class Engineer(models.Model):
     #http://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(max_length=15, validators=[phone_regex], blank=True) # validators should be a list
+
+    #Add an about field for the engineer. This will use the tinyMCE editor.
+    about = models.TextField(null=True, blank=True)
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)

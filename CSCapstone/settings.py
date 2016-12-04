@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'GroupsApp',
 	'UniversitiesApp',
 	'CommentsApp',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,30 @@ AUTH_USER_MODEL = 'AuthenticationApp.MyUser'
 
 #Use @login_required for functions that require authenticated users
 LOGIN_URL = "/login"
+
+
+#TINY MCE CONFIGURATION
+#Modified based on code provided on:
+#http://stackoverflow.com/questions/24914661/integrate-tinymce-to-django
+
+STATIC_ROOT = "/"
+
+TINYMCE_JS_URL = os.path.join(STATIC_ROOT, "static/tiny_mce/tiny_mce.js")
+
+TINYMCE_JS_ROOT = os.path.join(STATIC_ROOT, "static/tiny_mce")
+
+TINYMCE_JS_URL = os.path.join(STATIC_ROOT,'static/tiny_mce/tiny_mce_src.js')
+TINYMCE_DEFAULT_CONFIG = {
+    "relative_urls": "false",
+    "theme": "advanced",
+    "theme_advanced_buttons1":     "formatselect,bold,italic,underline,link,unlink,bullist,undo,code,image",
+    "theme_advanced_buttons2": "",
+    "theme_advanced_buttons3": "",
+    "plugins": "paste",
+    "height": "200px",
+    "width": "700px",
+    'theme_advanced_resizing' : "true",
+}
+
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
