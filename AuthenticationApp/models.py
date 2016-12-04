@@ -41,13 +41,16 @@ class MyUserManager(BaseUserManager):
         if user_type == 'PROFESSOR':
             is_engineer = True
 
+        #Make sure the user_type has a default of STUDENT if nothing was provided.
+        if (user_type == None):
+            user.user_type = 'STUDENT'
 
         user.save(using=self._db)
         return user
 
-
-    def create_superuser(self, email=None, password=None, first_name=None, last_name=None):
-        user = self.create_user(email, password=password, first_name=first_name, last_name=last_name)
+    #Adding user_type field so that superusers can be created.
+    def create_superuser(self, email=None, password=None, first_name=None, last_name=None, user_type=None):
+        user = self.create_user(email, password=password, first_name=first_name, last_name=last_name, user_type=user_type)
         user.is_admin = True
         user.save(using=self._db)
         return user

@@ -9,3 +9,6 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.University)
+
+#Make sure the admin acccount can edit and see courses.
+admin.site.register(models.Course)
