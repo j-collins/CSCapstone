@@ -6,7 +6,18 @@
 	<div class="container theme-showcase" role="main">
 		<div class="jumbotron">
 			<h1>{{ project.name }}</h1>
-			<p>{{ project.description }}</p>
+			<p>Description: {{ project.description }}</p>
+			<p>Programming Languages {{ project.programming_language }}</p>
+			<p>Minimum Years of Experience: {{ project.years_of_experience }} years</p>
+			<p>Speciality: {{ project.speciality }}</p>
+			<br>
+			<br>
+			{% if userIsMember %}
+			<a href="/project/update?name={{ project.name }}" class="btn btn-default">Update Project</a>
+			{% endif %}
+			{% if in_group %}
+			<a href="/project/add?name={{ project.name }}" class="btn btn-default">Add Project</a>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
