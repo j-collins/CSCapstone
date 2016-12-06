@@ -53,6 +53,7 @@ def auth_register(request):
 	
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():
+		#Added prints for debugging.
 		print(form.cleaned_data) #added brackets - shubhika
 		print(form.cleaned_data['user_type']) #added brackets - shubhika
 
@@ -63,7 +64,7 @@ def auth_register(request):
 			user_type=form.cleaned_data['user_type'])
 
 		#Saves user to database.
-		new_user.save()	
+		new_user.save()
 
 		#Get user_type from the form data. Form is an object with all the data provided by the user.
 		user_type = form.cleaned_data['user_type']
@@ -93,10 +94,6 @@ def auth_register(request):
 def update_profile(request):
 	form = UpdateForm(request.POST or None, instance=request.user)
 
-	if form.is_valid():
-		form.save()
-		messages.success(request, 'Success, your profile was saved!')
-
 	#Query the database to get the current user. Good ole Google.
 	user = MyUser.objects.get(email=request.user)
 
@@ -110,17 +107,26 @@ def update_profile(request):
 
 	#Get a user_type specific form to display for the user.
 	if user_type == "STUDENT":
-		student_form = StudentUpdateForm(request.POST or None, instance=request.user)
-		if student_form.is_valid():
+		student = Student.objects.get(user=request.user)
+		student_form = StudentUpdateForm(request.POST or None, instance=student)
+		if form.is_valid() and student_form.is_valid():
+			form.save()
 			student_form.save()
+			messages.success(request, 'Success, your profile was saved!')
 	elif user_type == "PROFESSOR":
-		professor_form = ProfessorUpdateForm(request.POST or None, instance=request.user)
-		if professor_form.is_valid():
+		professor = Professor.objects.get(user=request.user)
+		professor_form = ProfessorUpdateForm(request.POST or None, instance=professor)
+		if form.is_valid() and professor_form.is_valid():
+			form.save()
 			professor_form.save()
+			messages.success(request, 'Success, your profile was saved!')
 	elif user_type == "ENGINEER":
-		engineer_form = EngineerUpdateForm(request.POST or None, instance=request.user)
-		if engineer_form.is_valid():
+		engineer = Engineer.objects.get(user=request.user)
+		engineer_form = EngineerUpdateForm(request.POST or None, instance=engineer)
+		if form.is_valid() and engineer_form.is_valid():
+			form.save()
 			engineer_form.save()
+			messages.success(request, 'Success, your profile was saved!')
 
 	#Provide the form data to the auth_form.html template. See provided code above.
 	context = {

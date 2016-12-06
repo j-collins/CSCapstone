@@ -4,6 +4,12 @@
 
 {% block content %}
 
+<head>
+    {{ student_form.media }}
+    {{ professor_form.media }}
+    {{ engineer.media }}
+</head>
+
 <div class="container" role="main">
 	<div class="panel panel-default">
 		<form method="POST" class="panel-body validate"> {% csrf_token %}

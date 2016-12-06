@@ -18,6 +18,12 @@
 			{% if in_group %}
 			<a href="/project/add?name={{ project.name }}" class="btn btn-default">Add Project</a>
 			{% endif %}
+			<p>{{ project.description }}</p>
+			{% if userHasBookmarked %}
+            		<a href="/bookmark/remove?name={{ project.name }}" class="btn btn-default">Remove Bookmark</a>
+            		{% else %}
+            		<a href="/bookmark/create?name={{ project.name }}" class="btn btn-default">Bookmark</a>
+            		{% endif %}
 		</div>
 	</div>
 {% endblock %}

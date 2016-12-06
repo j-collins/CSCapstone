@@ -118,34 +118,39 @@ def courseForm(request):
 	return render(request, 'autherror.html')
 
 def addCourse(request):
-	if request.user.is_authenticated():
-		if request.method == 'POST':
-			form = forms.CourseForm(request.POST)
-			if form.is_valid():
-				in_university_name = request.GET.get('name', 'None')
-				in_university = models.University.objects.get(name__exact=in_university_name)
-				if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
-					return render(request, 'courseform.html', {'error' : 'Error: That course tag already exists at this university!'})
-				new_course = models.Course(tag=form.cleaned_data['tag'],
-										   name=form.cleaned_data['name'],
-										   description=form.cleaned_data['description'],
-										   university=in_university)
-				new_course.save()
-				in_university.course_set.add(new_course)
-				is_member = in_university.members.filter(email__exact=request.user.email)
-				context = {
-					'university' : in_university,
-					'userIsMember': is_member,
-				}
-				return render(request, 'university.html', context)
-			else:
-				return render(request, 'courseform.html', {'error' : 'Undefined Error!'})
-		else:
-			form = forms.CourseForm()
-			return render(request, 'courseform.html')
-		# render error page if user is not logged in
-	return render(request, 'autherror.html')
-		
+    #See if the user is a professor before adding the course.
+    user_type = request.user.get_user_type()
+    if (user_type == 'PROFESSOR'):
+        if request.user.is_authenticated():
+            if request.method == 'POST':
+                form = forms.CourseForm(request.POST)
+                if form.is_valid():
+                    in_university_name = request.GET.get('name', 'None')
+                    in_university = models.University.objects.get(name__exact=in_university_name)
+                    if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
+                        return render(request, 'courseform.html', {'error' : 'Error: That course tag already exists at this university!'})
+                    new_course = models.Course(tag=form.cleaned_data['tag'],
+                                               name=form.cleaned_data['name'],
+                                               description=form.cleaned_data['description'],
+                                               university=in_university)
+                    new_course.save()
+                    in_university.course_set.add(new_course)
+                    is_member = in_university.members.filter(email__exact=request.user.email)
+                    context = {
+                        'university' : in_university,
+                        'userIsMember': is_member,
+                    }
+                    return render(request, 'university.html', context)
+                else:
+                    return render(request, 'courseform.html', {'error' : 'Undefined Error!'})
+            else:
+                form = forms.CourseForm()
+                return render(request, 'courseform.html')
+            # render error page if user is not logged in
+        return render(request, 'autherror.html')
+    #If the user is not a professor, show an error screen.
+    return render(request, 'professorerror.html')
+
 def removeCourse(request):
 	if request.user.is_authenticated():
 		in_university_name = request.GET.get('name', 'None')

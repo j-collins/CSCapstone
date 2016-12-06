@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^', include('GroupsApp.urls')),
 	url(r'^', include('UniversitiesApp.urls')),
 	url(r'^', include('CommentsApp.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
+    url(r'^', include('BookmarksApp.urls')),
 ]
