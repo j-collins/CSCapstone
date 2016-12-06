@@ -8,14 +8,25 @@
                 <thead>
                     <tr>
                       <th style="width: 20%">Time</th>
-                        <th style="width: 80%">Comment</th>
+                        <th style="width: 20%">User ID</th>
+                        <th style="width: 50%">Comment</th>
+                        <th style="width: 10%"></th>
                     </tr>
                 </thead>
                 <tbody>
                    {% for item in comments %}
                    <tr>
                        <td>{{ item.time }}</td>
+                       <td>{{ item.user }}</td>
+                       {% autoescape off %}
                        <td>{{ item.comment }}</td>
+                       {% endautoescape %}
+                       <td>
+                       {% if item.user == currentUser %}
+                       <a href="/comments/remove?id={{ item.id }}&user={{ item.user }}" class="btn btn-default">Delete</a>
+                       {% else %}
+                       {% endif %}
+                       </td>
                    </tr>
                    {% endfor %}
                 </tbody>
