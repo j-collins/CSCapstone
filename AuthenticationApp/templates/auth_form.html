@@ -7,12 +7,12 @@
 <head>
     {{ student_form.media }}
     {{ professor_form.media }}
-    {{ engineer.media }}
+    {{ engineer_form.media }}
 </head>
 
 <div class="container" role="main">
 	<div class="panel panel-default">
-		<form method="POST" class="panel-body validate"> {% csrf_token %}
+		<form method="POST" class="panel-body validate" novalidate> {% csrf_token %}
 			{{ form.as_p }}
 			{{ student_form.as_p }}
 			{{ professor_form.as_p }}

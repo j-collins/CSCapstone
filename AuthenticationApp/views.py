@@ -6,12 +6,16 @@ Created by Naman Patwari on 10/4/2016.
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+#Redirect will take me to another page.
+from django.shortcuts import render, redirect
 from django.contrib import messages
 
 
 from .forms import LoginForm, RegisterForm, UpdateForm, StudentUpdateForm, ProfessorUpdateForm, EngineerUpdateForm
 from .models import MyUser, Student, Professor, Engineer
+
+from UniversitiesApp.models import University
+from CompaniesApp.models import Company
 
 # Auth Views
 
@@ -80,7 +84,8 @@ def auth_register(request):
 
 		login(request, new_user);
 		messages.success(request, 'Success! Your account was created.')
-		return render(request, 'index.html')
+		#When user registers, automatically send to update profile.
+		return redirect('/update')
 
 	context = {
 		"form": form,
@@ -112,21 +117,45 @@ def update_profile(request):
 		if form.is_valid() and student_form.is_valid():
 			form.save()
 			student_form.save()
+			#Add student to the university.
+			university_name = student.get_university()
+			university_object = University.objects.get(name__exact=university_name)
+			university_object.members.add(request.user)
+			university_object.save()
+
 			messages.success(request, 'Success, your profile was saved!')
+			#When user updates profile, redirect to welcome page.
+			return redirect('/')
 	elif user_type == "PROFESSOR":
 		professor = Professor.objects.get(user=request.user)
 		professor_form = ProfessorUpdateForm(request.POST or None, instance=professor)
 		if form.is_valid() and professor_form.is_valid():
 			form.save()
 			professor_form.save()
+
+			#Add professor to the university.
+			university_name = professor.get_university()
+			university_object = University.objects.get(name__exact=university_name)
+			university_object.members.add(request.user)
+			university_object.save()
+
 			messages.success(request, 'Success, your profile was saved!')
+			return redirect('/')
 	elif user_type == "ENGINEER":
 		engineer = Engineer.objects.get(user=request.user)
 		engineer_form = EngineerUpdateForm(request.POST or None, instance=engineer)
 		if form.is_valid() and engineer_form.is_valid():
 			form.save()
 			engineer_form.save()
+
+			#Add engineer to the company.
+			company_name = engineer.get_company()
+			company_object = Company.objects.get(name__exact=company_name)
+			company_object.members.add(request.user)
+			company_object.save()
+
 			messages.success(request, 'Success, your profile was saved!')
+			return redirect('/')
 
 	#Provide the form data to the auth_form.html template. See provided code above.
 	context = {

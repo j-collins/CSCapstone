@@ -82,7 +82,7 @@ class MyUser(AbstractBaseUser):
     user_type = models.CharField(max_length=9, choices = USER_TYPES, default="STUDENT")
 
 
-    # #New fields added
+    #New fields added.
     is_student = models.BooleanField(default=False,)
     is_professor = models.BooleanField(default=False,)
     is_engineer = models.BooleanField(default=False,)
@@ -101,7 +101,7 @@ class MyUser(AbstractBaseUser):
     def __str__(self):              #Python 3
         return self.email
 
-    def __unicode__(self):           # Python 2
+    def __unicode__(self):           #Python 2
         return self.email
 
     def has_perm(self, perm, obj=None):
@@ -129,8 +129,13 @@ class Student(models.Model):
         MyUser,
         on_delete=models.CASCADE,
         primary_key=True)
+
     skills = models.CharField(max_length=120, null=True, blank=True)
+
     experience =  models.CharField(max_length=120, null=True, blank=True)
+
+    #University model already exists, so have a field that points to the Univeristy database table using ForeignKey.
+    university = models.ForeignKey('UniversitiesApp.University', null=True, on_delete=models.CASCADE)
 
     #Add an about field for the student. This will use the tinyMCE editor.
     about = models.TextField(null=True, blank=True)
@@ -140,6 +145,10 @@ class Student(models.Model):
 
     def get_short_name(self):        
         return self.user.first_name
+
+    #Add getter for university.
+    def get_university(self):        
+        return self.university
 
     def __str__(self):              #Python 3
         return self.user.email
@@ -153,10 +162,13 @@ class Student(models.Model):
 
     def has_module_perms(self, app_label):        
         return True
+
     def get_experience(self):
         return self.experience
+
     def get_skills(self):
         return self.skills
+
     @property
     def is_staff(self):
         return False
@@ -166,7 +178,7 @@ class Professor(models.Model):
 
     title = models.CharField(max_length=120, null=True, blank=True)
 
-    #University model already exists, so have a field that points to the Univeristy database table. Use ForeignKey.
+    #University model already exists, so have a field that points to the Univeristy database table using ForeignKey.
     university = models.ForeignKey('UniversitiesApp.University', null=True, on_delete=models.CASCADE)
 
     #http://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
@@ -182,10 +194,14 @@ class Professor(models.Model):
     def get_short_name(self):
         return self.user.first_name
 
+    #Add getter for university.
+    def get_university(self):        
+        return self.university
+
     def __str__(self):              #Python 3
         return self.user.email
 
-    def __unicode__(self):           # Python 2
+    def __unicode__(self):           #Python 2
         return self.user.email
 
     def has_perm(self, perm, obj=None):
@@ -205,6 +221,7 @@ class Engineer(models.Model):
 
     #Use ForeignKey.
     alma_mater = models.ForeignKey('UniversitiesApp.University', null=True, on_delete=models.CASCADE)
+
     company = models.ForeignKey('CompaniesApp.Company', null=True, on_delete=models.CASCADE)
 
     #http://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
@@ -219,6 +236,10 @@ class Engineer(models.Model):
 
     def get_short_name(self):
         return self.user.first_name
+
+    #Add getter for company.
+    def get_company(self):        
+        return self.company
 
     def __str__(self):              #Python 3
         return self.user.email
