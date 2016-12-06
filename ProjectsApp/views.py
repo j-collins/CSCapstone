@@ -28,6 +28,8 @@ def getProject(request):
         print(in_name)
 
         in_project = models.Project.objects.get(name__exact=in_name)
+        #Get the user_object by searching for the exact email.
+        user_object = models.MyUser.objects.get(email__exact=request.user.email)
 
         flag = False
         if request.user.id == in_project.engineer_id:
