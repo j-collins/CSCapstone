@@ -13,7 +13,7 @@ class Project(models.Model):
     company =models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
     engineer = models.ForeignKey(Engineer, on_delete=models.CASCADE, null=True)
     programming_language = models.CharField(max_length=1000, default='')
-    years_of_experience = models.CharField(max_length=1000, default='')
+    years_of_experience = models.IntegerField( default=0)
     speciality = models.CharField(max_length=1000, default='')
 
     # TODO Task 3.5: Add field for company relationship

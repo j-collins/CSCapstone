@@ -61,17 +61,20 @@ def getAddGroupSuccess(request):
                         if models.Project.objects.filter(name__exact=form.cleaned_data['project']).exists() is not True:
                             return render(request, 'autherror.html', {'error': 'project doesnt exists'})
                         project = models.Project.objects.get(name__exact=form.cleaned_data['project'])
-                        in_group = Group.objects.get(name__exact=form.cleaned_data['group']) #check if user is a group member
-                        if in_group.project_id == None:
-                            in_group.project_id = project.id
-                            print(in_group.project_id)
-                            in_group.save()
-                            print(in_group.project_id)
-                            context = {
-                                'project': project,
-                            }
-                            return render(request, 'project.html', context)
-                        return render(request, 'addgroupform.html', {'error': 'Group has a project!! Only one project per group'})
+                        in_group = Group.objects.get(name__exact=form.cleaned_data['group'])
+                        #check if user is a group member
+                        if in_group.members.filter(myuser_id__exact=request.user.id):
+                            if in_group.project_id == None:
+                                in_group.project_id = project.id
+                                print(in_group.project_id)
+                                in_group.save()
+                                print(in_group.project_id)
+                                context = {
+                                    'project': project,
+                                }
+                                return render(request, 'project.html', context)
+                            return render(request, 'addgroupform.html', {'error': 'Group has a project!! Only one project per group'})
+                        return render(request,'addgroupform.html', {'error' : 'You are not a member of this group!!!'} )
                     return render(request, 'addgroupform.html', {'error' : 'Group does not exisits!!!'})
     # render error page if user is not logged in
     return render(request, 'autherror.html')
@@ -101,7 +104,9 @@ def getProjectFormSuccess(request):
                     print('heremm!!')
                     if models.Project.objects.filter(name__exact=form.cleaned_data['name']).exists():
                         return render(request, 'projectform.html', {'error' : 'Error: That Project name already exists!'})
-                    new_project = models.Project(name=form.cleaned_data['name'], description=form.cleaned_data['description'], programming_language=form.cleaned_data['programming_language'], years_of_experience=form.cleaned_data['years_of_experience'], speciality=form.cleaned_data['speciality'], engineer_id= request.user.id)
+                    engineer = models.Engineer.objects.filter(user_id__exact=request.user.id)
+                    company_id = engineer.company_id
+                    new_project = models.Project(name=form.cleaned_data['name'], description=form.cleaned_data['description'], programming_language=form.cleaned_data['programming_language'], years_of_experience=form.cleaned_data['years_of_experience'], speciality=form.cleaned_data['speciality'], engineer_id= request.user.id, company_id=company_id)
                     new_project.save()
                     context = {
                         'name' : form.cleaned_data['name'],

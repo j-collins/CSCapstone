@@ -1,4 +1,4 @@
-"""AuthenticationApp Models
+"""AuthenticationApp Modeles
 
 Created by Naman Patwari on 10/4/2016.
 """
@@ -127,7 +127,7 @@ class Student(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
     skills = models.CharField(max_length=120, null=True, blank=True)
-    experience =  models.CharField(max_length=120, null=True, blank=True)
+    experience =  models.IntegerField(default=0)
 
     def get_full_name(self):
         return "%s %s" %(self.user.first_name, self.user.last_name)
