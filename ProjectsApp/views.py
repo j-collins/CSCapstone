@@ -130,7 +130,8 @@ def getProjectFormSuccess(request):
                     print('heremm!!')
                     if models.Project.objects.filter(name__exact=form.cleaned_data['name']).exists():
                         return render(request, 'projectform.html', {'error' : 'Error: That Project name already exists!'})
-                    engineer = models.Engineer.objects.filter(user_id__exact=request.user.id)
+                    engineer = models.Engineer.objects.get(user__exact=request.user)
+                    #engineer = models.Engineer.objects.filter(user_id__exact=request.user.id)
                     company_id = engineer.company_id
                     new_project = models.Project(name=form.cleaned_data['name'], description=form.cleaned_data['description'], programming_language=form.cleaned_data['programming_language'], years_of_experience=form.cleaned_data['years_of_experience'], speciality=form.cleaned_data['speciality'], engineer_id= request.user.id, company_id=company_id)
                     new_project.save()
