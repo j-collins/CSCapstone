@@ -6,12 +6,24 @@
 	<div class="container theme-showcase" role="main">
 		<div class="jumbotron">
 			<h1>{{ project.name }}</h1>
+			<p>Description: {{ project.description }}</p>
+			<p>Programming Languages {{ project.programming_language }}</p>
+			<p>Minimum Years of Experience: {{ project.years_of_experience }} years</p>
+			<p>Speciality: {{ project.speciality }}</p>
+			<br>
+			<br>
+			{% if userIsMember %}
+			<a href="/project/update?name={{ project.name }}" class="btn btn-default">Update Project</a>
+			{% endif %}
+			{% if in_group %}
+			<a href="/project/add?name={{ project.name }}" class="btn btn-default">Add Project</a>
+			{% endif %}
 			<p>{{ project.description }}</p>
 			{% if userHasBookmarked %}
-            <a href="/bookmark/remove?name={{ project.name }}" class="btn btn-default">Remove Bookmark</a>
-            {% else %}
-            <a href="/bookmark/create?name={{ project.name }}" class="btn btn-default">Bookmark</a>
-            {% endif %}
+            		<a href="/bookmark/remove?name={{ project.name }}" class="btn btn-default">Remove Bookmark</a>
+            		{% else %}
+            		<a href="/bookmark/create?name={{ project.name }}" class="btn btn-default">Bookmark</a>
+            		{% endif %}
 		</div>
 	</div>
 {% endblock %}

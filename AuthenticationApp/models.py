@@ -1,4 +1,4 @@
-"""AuthenticationApp Models
+"""AuthenticationApp Modeles
 
 Created by Naman Patwari on 10/4/2016.
 """
@@ -131,8 +131,7 @@ class Student(models.Model):
         primary_key=True)
 
     skills = models.CharField(max_length=120, null=True, blank=True)
-
-    experience =  models.CharField(max_length=120, null=True, blank=True)
+    experience =  models.IntegerField(default=0)
 
     #University model already exists, so have a field that points to the Univeristy database table using ForeignKey.
     university = models.ForeignKey('UniversitiesApp.University', null=True, on_delete=models.CASCADE)

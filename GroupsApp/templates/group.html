@@ -33,6 +33,23 @@
 				</tbody>
 			</table>
 		</div>
+	<div class="container">
+		<div class="jumbotron">
+			{% if IsProject %}
+			{% if IsCompany %}
+			<a href="/company?name={{ Company.name }}">{{ Project.name }}</a>
+			{% else %}
+			<p>{{ Project.name }}</p>
+			{% endif %}
+			{% else %}
+			{% if userIsMember %}
+			<a href="/project?name={{ Project1.name }}">{{ Project1.name }}</a>
+			<a href="/project?name={{ Project2.name }}">{{ Project2.name }}</a>
+			<a href="/project?name={{ Project3.name }}">{{ Project3.name }}</a>
+			{% endif %}
+			{% endif %}
+		</div>
+	</div>
 	</div>
 
 {% endblock %}
