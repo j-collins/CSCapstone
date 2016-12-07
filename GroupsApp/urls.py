@@ -6,6 +6,7 @@ from django.conf.urls import url
 
 from . import views
 
+
 urlpatterns = [
     url(r'^group/all$', views.getGroups, name='Groups'),
 	url(r'^group/form$', views.getGroupForm, name='GroupForm'),

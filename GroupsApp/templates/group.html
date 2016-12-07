@@ -55,16 +55,7 @@
 			{% endif %}
 			{% endif %}
 	</div>
-	</div>
-
-	<div class="container theme-showcase" role="main"> 
-		<div>
-			{% if userIsMember %}
-			<a href="/group/unjoin?name={{ group.name }}" class="btn btn-default">Unjoin this Group</a>
-			<a href="/group/join?name={{ group.name }}" class="btn btn-default">Add a Student</a>
-			{% endif %}
-		</div>
-	</div>		
+	</div>	
     <div class="container" role="main">
         <div class="table-responsive">
             <table class="table table-striped sortable">
@@ -94,7 +85,15 @@
                    {% endfor %}
                 </tbody>
             </table>
-            <a href="/addcomment" class="btn btn-default">Add Comment</a>
+            	{% if userIsMember %}
+		<a href="/group/addcomments?name={{ group.name }}" class="btn btn-default">Add a Comment</a>
+		{% endif %}
+		{% if userIsCompany %}
+		<a href="/group/addcomments?name={{ group.name }}" class="btn btn-default">Add a Comment</a>
+		{% endif %}
+		{% if IsTeacher %}
+        	<a href="/group/addcomments?name={{ group.name }}" class="btn btn-default">Add a Comment</a>
+	   	{% endif %}
         </div>
     </div>
 {% endblock %}

@@ -7,6 +7,7 @@ from AuthenticationApp.models import MyUser, Student
 from ProjectsApp.models import Project
 from UniversitiesApp.models import University
 from CompaniesApp.models import Company
+from CommentsApp.models import Comment
 
 # Create your models here.
 class Group(models.Model):

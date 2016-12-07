@@ -9,6 +9,7 @@ from ProjectsApp.models import Project
 from CompaniesApp.models import Company
 from UniversitiesApp.models import University
 from django.shortcuts import get_object_or_404
+from CommentsApp.models import Comment
 
 def getGroups(request):
     #if request.user in Student.objects.all():
@@ -77,11 +78,12 @@ def getGroup(request):
         for member in member_list:
             student = models.Student.objects.get(user_id__exact=user_id)
             university_name = student.get_university()
-            print ("universuty"+ university_name)
-            university = models.University.objects.get(name__exact=university_name) #this will break too
-            if university.members.filter(myuser_id__exact=request.user.id) and models.Professor.objects.filter(user_id__exact=request.user.id):
-                userIsTeacher = True
-        comments_list = models.Comment.objects.get(group_name__exact=in_name)
+            #print ("universuty"+ university_name)
+            if university_name is not None:
+                university = models.University.objects.get(name__exact=university_name) #this will break too
+                if university.members.filter(myuser_id__exact=request.user.id) and models.Professor.objects.filter(user_id__exact=request.user.id):
+                    userIsTeacher = True
+        comments_list = Comment.objects.all()
         context = {
             'group' : in_group,
             'userIsMember': is_member,
