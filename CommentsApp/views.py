@@ -43,7 +43,7 @@ def getComments(request):
 #    return render(request, 'commentForm.html')
 
 def addComment(request):
-    print "Entered addComment"
+    print ("Entered addComment")
 
     form = forms.CommentForm(request.POST or None)
 

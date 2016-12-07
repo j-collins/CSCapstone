@@ -194,7 +194,7 @@ def addCourse(request):
             if request.method == 'POST':
                 form = forms.CourseForm(request.POST)
                 if form.is_valid():
-                    print "Form is valid!"
+                    print("Form is valid!")
                     in_university_name = request.GET.get('name', 'None')
                     in_university = models.University.objects.get(name__exact=in_university_name)
                     if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():

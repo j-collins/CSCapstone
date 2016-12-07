@@ -18,7 +18,7 @@ def getBookmarks(request):
         user_object = models.MyUser.objects.get(email__exact=request.user.email)
 
         bookmarks_list = models.Bookmark.objects.filter(user=user_object)
-        print bookmarks_list
+        print(bookmarks_list)
 
         context = {
             'bookmarksList' : bookmarks_list

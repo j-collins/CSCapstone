@@ -19,7 +19,7 @@
 			<table class="table table-striped sortable">
 				<thead>
 					<tr>
-						<th>Users</th>
+						<th>Groups Members</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -34,21 +34,26 @@
 			</table>
 		</div>
 	<div class="container">
-		<div class="jumbotron">
 			{% if IsProject %}
 			{% if IsCompany %}
+			<h4>Project Assigned to the Group</h4>
 			<a href="/company?name={{ Company.name }}">{{ Project.name }}</a>
+			<p>{{Project.description}}</p>
 			{% else %}
-			<p>{{ Project.name }}</p>
+			<h6>{{ Project.name }}</h6>
+			<p>{{Project.description}}</p>
 			{% endif %}
 			{% else %}
 			{% if userIsMember %}
+			<h4>Suggested Projects</h4>
 			<a href="/project?name={{ Project1.name }}">{{ Project1.name }}</a>
+			<p>{{Project1.description}}</p>
 			<a href="/project?name={{ Project2.name }}">{{ Project2.name }}</a>
+			<p>{{Project2.description}}</p>
 			<a href="/project?name={{ Project3.name }}">{{ Project3.name }}</a>
+			<p>{{Project3.description}}</p>
 			{% endif %}
 			{% endif %}
-		</div>
 	</div>
 	</div>
 
