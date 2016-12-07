@@ -58,4 +58,44 @@
 	</div>
 	</div>
 
+	<div class="container theme-showcase" role="main"> 
+		<div>
+			{% if userIsMember %}
+			<a href="/group/unjoin?name={{ group.name }}" class="btn btn-default">Unjoin this Group</a>
+			<a href="/group/join?name={{ group.name }}" class="btn btn-default">Add a Student</a>
+			{% endif %}
+		</div>
+	</div>		
+    <div class="container" role="main">
+        <div class="table-responsive">
+            <table class="table table-striped sortable">
+                <thead>
+                    <tr>
+                      <th style="width: 20%">Time</th>
+                        <th style="width: 20%">User ID</th>
+                        <th style="width: 50%">Comment</th>
+                        <th style="width: 10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                   {% for item in comments %}
+                   <tr>
+                       <td>{{ item.time }}</td>
+                       <td>{{ item.user }}</td>
+                       {% autoescape off %}
+                       <td>{{ item.comment }}</td>
+                       {% endautoescape %}
+                       <td>
+                       {% if item.user == currentUser %}
+                       <a href="/comments/remove?id={{ item.id }}&user={{ item.user }}" class="btn btn-default">Delete</a>
+                       {% else %}
+                       {% endif %}
+                       </td>
+                   </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
+            <a href="/addcomment" class="btn btn-default">Add Comment</a>
+        </div>
+    </div>
 {% endblock %}
