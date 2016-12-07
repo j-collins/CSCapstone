@@ -163,3 +163,17 @@ TINYMCE_DEFAULT_CONFIG = {
 
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
+
+#BLEACH SETTINGS
+#http://stackoverflow.com/questions/6830800/how-to-prevent-xss-attacks-when-i-need-to-render-html-from-a-wysiwyg-editor
+
+BLEACH_VALID_TAGS = ['p', 'b', 'i', 'strike', 'ul', 'li', 'ol', 'br',
+                     'span', 'blockquote', 'hr', 'a', 'img', 'strong',
+                     'em', 'h1', 'h2', 'h3',]
+BLEACH_VALID_ATTRS = {
+    'span': ['style', ],
+    'p': ['align', ],
+    'a': ['href', 'rel'],
+    'img': ['src', 'alt', 'style'],
+}
+BLEACH_VALID_STYLES = ['color', 'cursor', 'float', 'margin']

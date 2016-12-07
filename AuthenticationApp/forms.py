@@ -8,6 +8,10 @@ from .models import MyUser, Student, Professor, Engineer
 #Import TinyMCE.
 from tinymce.widgets import TinyMCE
 
+#Import bleach to stop XSS attacks.
+import bleach
+from django.conf import settings
+
 #Import USER_TYPES.
 from .models import USER_TYPES
 
@@ -115,7 +119,12 @@ class StudentUpdateForm(forms.ModelForm):
                 return experience
             except:
                 raise forms.ValidationError("There was an error, please contact us later")
-
+        
+        #Add method to defend against XSS attacks for the WYSIWYG editor.
+        def clean_about(self):
+            about = self.cleaned_data.get('about', '')
+            cleaned_text = bleach.clean(about, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+            return cleaned_text #sanitize html
 
 class ProfessorUpdateForm(forms.ModelForm):
 
@@ -125,6 +134,12 @@ class ProfessorUpdateForm(forms.ModelForm):
     class Meta:
         model = Professor
         exclude = ['user']
+
+    #Add method to defend against XSS attacks for the WYSIWYG editor.
+    def clean_about(self):
+        about = self.cleaned_data.get('about', '')
+        cleaned_text = bleach.clean(about, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text #sanitize html
 
 
 class EngineerUpdateForm(forms.ModelForm):
@@ -136,6 +151,11 @@ class EngineerUpdateForm(forms.ModelForm):
         model = Engineer
         exclude = ['user']
 
+    #Add method to defend against XSS attacks for the WYSIWYG editor.
+    def clean_about(self):
+        about = self.cleaned_data.get('about', '')
+        cleaned_text = bleach.clean(about, settings.BLEACH_VALID_TAGS, settings.BLEACH_VALID_ATTRS, settings.BLEACH_VALID_STYLES)
+        return cleaned_text #sanitize html
 
 """Admin Forms"""
 

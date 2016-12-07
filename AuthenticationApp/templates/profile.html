@@ -1,0 +1,85 @@
+{% extends "body.html" %}
+
+{% block content %}
+	<!-- Content -->
+    <div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+			<h3>{{ user.first_name }} {{user.last_name}} </h3>
+			<p>{{ user.email }}</p>
+		</div>
+    </div>
+    <div class="container" role="main">
+		<table style="width:100%">
+		  <tr>
+		    <td><h4>Name</h4></td>
+		    <td><h4>{{ user.first_name}} {{user.last_name}}</h4></td> 
+		  </tr>
+
+		{% if isStudent %}
+			<tr>
+				<td><h4>Skills</h4></td>
+				<td><h4>{{ student.skills}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>Experience</h4></td>
+				<td><h4>{{ student.experience}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>University</h4></td>
+				<td><a href="/university?name={{ student.university }}"><h4>{{ student.university}}</h4></a></td> 
+			</tr>
+			<tr>
+				<td><h4>About</h4></td>
+				{% autoescape off %}
+				<td>{{ student.about}}</td> 
+				{% endautoescape %}
+			</tr>
+		{% endif %}
+		{% if isProfessor %}
+			<tr>
+				<td><h4>Title</h4></td>
+				<td><h4>{{ professor.title}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>University</h4></td>
+				<td><a href="/university?name={{ professor.university }}"><h4>{{ professor.university}}</h4></a></td> 
+			</tr>
+			<tr>
+				<td><h4>Phone Number</h4></td>
+				<td><h4>{{ professor.phone_number}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>About</h4></td>
+				{% autoescape off %}
+				<td>{{ professor.about}}</td> 
+				{% endautoescape %}
+			</tr>
+		{% endif %}
+		{% if isEngineer %}
+			<tr>
+				<td><h4>Title</h4></td>
+				<td><h4>{{ engineer.title}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>Company</h4></td>
+				<td><a href="/company?name={{ engineer.company }}"><h4>{{ engineer.company}}</h4></a></td> 
+			</tr>
+			<tr>
+				<td><h4>Alma Mater</h4></td>
+				<td><h4>{{ engineer.alma_mater}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>Phone Number</h4></td>
+				<td><h4>{{ engineer.phone_number}}</h4></td> 
+			</tr>
+			<tr>
+				<td><h4>About</h4></td>
+				{% autoescape off %}
+				<td>{{ engineer.about }}</td> 
+				{% endautoescape %}
+			</tr>
+		{% endif %}
+		</table>
+	</div>
+	
+{% endblock %}

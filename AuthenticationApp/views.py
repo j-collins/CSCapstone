@@ -168,3 +168,47 @@ def update_profile(request):
 		"links" : ["logout"],
 	}
 	return render(request, 'auth_form.html', context)
+
+#Add a view to show the user profile.
+def view_profile(request):
+    if request.user.is_authenticated():
+
+        #Get the user object by email.
+        user_email = request.GET.get('email', 'None')
+        user_object = MyUser.objects.get(email__exact=user_email)
+
+        #Get the user type.
+        user_type = user_object.get_user_type()
+
+        #Initialize variables.
+        is_student = False
+        is_professor = False
+        is_engineer = False
+        student = None
+        professor = None
+        engineer = None
+
+        #Based on the user type, get the student, professor, or engineer object.
+        if user_type == 'STUDENT':
+        	is_student = True
+        	student = Student.objects.get(user=request.user)
+        elif user_type == 'PROFESSOR':
+        	is_professor = True
+        	professor = Professor.objects.get(user=request.user)
+        elif user_type == 'ENGINEER':
+        	is_engineer = True
+        	engineer = Engineer.objects.get(user=request.user)
+
+        #Provide the objects to the profile html.
+        context = {
+            'user' : user_object,
+            'isStudent' : is_student,
+            'isProfessor' : is_professor,
+            'isEngineer' : is_engineer,
+            'student' : student,
+            'professor' : professor,
+            'engineer' : engineer,
+        }
+        return render(request, 'profile.html', context)
+    # render error page if user is not logged in
+    return render(request, 'autherror.html')
