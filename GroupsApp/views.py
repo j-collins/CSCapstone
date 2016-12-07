@@ -45,7 +45,7 @@ def getGroup(request):
             in_project = models.Project.objects.get(id__exact=project_id)
             company_id = in_project.company_id
             if company_id != None:
-                company = models.Company.objects.get(id__exact=company_id) #this will break
+                company = models.Company.objects.get(id__exact=company_id) #this will break change thiiiiisss! Dont forget
                 userIsCompany = company.members.filter(myuser_id__exact=request.user.id)
                 company_assigned = True
         elif is_member.exists():
@@ -81,9 +81,10 @@ def getGroup(request):
             #print ("universuty"+ university_name)
             if university_name is not None:
                 university = models.University.objects.get(name__exact=university_name) #this will break too
-                if university.members.filter(myuser_id__exact=request.user.id) and models.Professor.objects.filter(user_id__exact=request.user.id):
+                if university.members.filter(email__exact=request.user.email) and Professor.objects.filter(user_id__exact=request.user.id):
                     userIsTeacher = True
-        comments_list = Comment.objects.all()
+        comments_list = Comment.objects.filter(group_name__exact=in_group)
+        #comments_list = Comment.objects.all()
         context = {
             'group' : in_group,
             'userIsMember': is_member,
