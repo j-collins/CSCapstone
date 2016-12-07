@@ -33,4 +33,6 @@ class Project(models.Model):
         return self.years_of_experience
     def get_speciality(self):
         return self.speciality
+    def get_company(self):
+        return self.company
 

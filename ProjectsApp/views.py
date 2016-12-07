@@ -1,7 +1,7 @@
 """ProjectsApp Views
 Created by Harris Christiansen on 10/02/16.
 """
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import forms
 
 from . import models
@@ -50,11 +50,29 @@ def getProject(request):
         else:
             user_has_bookmarked = False
 
+        try:
+            #Get the engineer object for the user.
+            engineer_object = models.Engineer.objects.get(user__exact=request.user)
+
+            #Get the company for the engineer.
+            engineer_company = engineer_object.get_company()
+
+            project_company = in_project.get_company()
+
+            if (str(engineer_company) == str(project_company)):
+                user_can_delete = True
+            else:
+                user_can_delete = False
+        except:
+            engineer_object = None 
+            user_can_delete = False
+
         context = {
             'project' : in_project,
             'userIsMember': flag,
             'in_group' : group,
             'userHasBookmarked' : user_has_bookmarked,
+            'userCanDelete' : user_can_delete,
         }
         #Get the user_object by searching for the exact email.
 
@@ -139,5 +157,21 @@ def getProjectFormSuccess(request):
                         'name' : form.cleaned_data['name'],
                     }
                     return render(request, 'projectformsuccess.html', context)
+    # render error page if user is not logged in
+    return render(request, 'autherror.html')
+
+#Add method to delete project.
+#This is if the delete button is visible (i.e. user is from the project company)
+def removeProject(request):
+    if request.user.is_authenticated():
+        #Get the project object from the url.
+        project_name = request.GET.get('name', 'None')
+        project_object = models.Project.objects.get(name__exact=project_name)
+
+        #Delete the project.
+        project_object.delete()
+
+        #Redirect to the project list.
+        return redirect('/project/all')
     # render error page if user is not logged in
     return render(request, 'autherror.html')

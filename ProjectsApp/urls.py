@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^project/form$', views.getProjectForm, name='ProjectForm'),
     url(r'^project/add$', views.getAddGroup, name='GJoin'),
     url(r'^project/success$', views.getAddGroupSuccess, name='GSuccess'),
-    url(r'^project/update$', views.update_project, name='UpdateProject')
+    url(r'^project/update$', views.update_project, name='UpdateProject'),
+    url(r'^project/remove$', views.removeProject, name='RemoveProject'),
 ]
