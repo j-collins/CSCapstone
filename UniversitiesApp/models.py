@@ -13,7 +13,7 @@ class University(models.Model):
     description = models.CharField(max_length=300)
     website = models.CharField(max_length=300, default="/")
     members = models.ManyToManyField(MyUser)
-    
+
     def __str__(self):
         return self.name
 	

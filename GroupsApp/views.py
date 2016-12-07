@@ -4,10 +4,12 @@ Created by Naman Patwari on 10/10/2016.
 from django.shortcuts import render
 from . import models
 from . import forms
-from AuthenticationApp.models import Student
+from AuthenticationApp.models import Student, Professor
 from ProjectsApp.models import Project
 from CompaniesApp.models import Company
+from UniversitiesApp.models import University
 from django.shortcuts import get_object_or_404
+
 def getGroups(request):
     #if request.user in Student.objects.all():
         if request.user.is_authenticated():
@@ -24,7 +26,6 @@ def getGroup(request):
         print(in_name)
         in_group = models.Group.objects.get(name__exact=in_name)
         is_member = in_group.members.filter(email__exact = request.user.email)
-
         print(is_member)
         project1 = None
         project2 = None
@@ -33,6 +34,8 @@ def getGroup(request):
         company = None
         project_assigned = False
         company_assigned = False
+        userIsCompany = False
+        userIsTeacher = False
         print("herererer")
         if in_group.project_id != None:
             print ("hererere+proj")
@@ -41,7 +44,8 @@ def getGroup(request):
             in_project = models.Project.objects.get(id__exact=project_id)
             company_id = in_project.company_id
             if company_id != None:
-                company = models.Company.objects.get(id__exact=company_id)
+                company = models.Company.objects.get(id__exact=company_id) #this will break
+                userIsCompany = company.members.filter(myuser_id__exact=request.user.id)
                 company_assigned = True
         elif is_member.exists():
             print("here")
@@ -69,7 +73,15 @@ def getGroup(request):
                         project2 = project
                     if count == 3:
                         project3 = project
-
+        member_list = in_group.members.all()
+        for member in member_list:
+            student = models.Student.objects.get(user_id__exact=user_id)
+            university_name = student.get_university()
+            print ("universuty"+ university_name)
+            university = models.University.objects.get(name__exact=university_name) #this will break too
+            if university.members.filter(myuser_id__exact=request.user.id) and models.Professor.objects.filter(user_id__exact=request.user.id):
+                userIsTeacher = True
+        comments_list = models.Comment.objects.get(group_name__exact=in_name)
         context = {
             'group' : in_group,
             'userIsMember': is_member,
@@ -80,6 +92,9 @@ def getGroup(request):
             'Company': company,
             'IsCompany': company_assigned,
             'IsProject': project_assigned,
+            'userIsCompany': userIsCompany,
+            'IsTeacher' : userIsTeacher,
+            'comments': comments_list
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in

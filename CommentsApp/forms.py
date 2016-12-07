@@ -22,7 +22,7 @@ class CommentForm(forms.ModelForm):
         model = models.Comment
 
         #Exclude time so that a user can't update it.
-        exclude = ['time', 'user']
+        exclude = ['time', 'user', 'group_name']
 
     #Add method to defend against XSS attacks for the WYSIWYG editor.
     def clean_comment(self):

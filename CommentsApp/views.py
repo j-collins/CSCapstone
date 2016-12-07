@@ -46,11 +46,12 @@ def addComment(request):
     print ("Entered addComment")
 
     form = forms.CommentForm(request.POST or None)
+    in_name = request.GET.get('name', 'None')
 
     if form.is_valid():
         #Query the database to get the current user. Good ole Google.
         user = MyUser.objects.get(email=request.user)
-        new_comment = models.Comment(comment=form.cleaned_data['comment'], user=user)
+        new_comment = models.Comment(comment=form.cleaned_data['comment'], user=user, group_name=in_name)
         new_comment.save()
         comments_list = models.Comment.objects.all()
         #is_member = comments_list.comment.filter(user=user)
