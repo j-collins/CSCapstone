@@ -107,7 +107,7 @@ def getAddGroupSuccess(request):
                         project = models.Project.objects.get(name__exact=form.cleaned_data['project'])
                         in_group = Group.objects.get(name__exact=form.cleaned_data['group'])
                         #check if user is a group member
-                        if in_group.members.filter(myuser_id__exact=request.user.id):
+                        if in_group.members.filter(email__exact=request.user.email):
                             if in_group.project_id == None:
                                 in_group.project_id = project.id
                                 print(in_group.project_id)

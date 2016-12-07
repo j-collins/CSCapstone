@@ -46,7 +46,7 @@ def getGroup(request):
             company_id = in_project.company_id
             if company_id != None:
                 company = models.Company.objects.get(id__exact=company_id) #this will break change thiiiiisss! Dont forget
-                userIsCompany = company.members.filter(myuser_id__exact=request.user.id)
+                userIsCompany = company.members.filter(email__exact=request.user.email)
                 company_assigned = True
         elif is_member.exists():
             print("here")
@@ -76,7 +76,7 @@ def getGroup(request):
                         project3 = project
         member_list = in_group.members.all()
         for member in member_list:
-            student = models.Student.objects.get(user_id__exact=user_id)
+            student = models.Student.objects.get(user_id=member)
             university_name = student.get_university()
             #print ("universuty"+ university_name)
             if university_name is not None:
@@ -97,7 +97,8 @@ def getGroup(request):
             'IsProject': project_assigned,
             'userIsCompany': userIsCompany,
             'IsTeacher' : userIsTeacher,
-            'comments': comments_list
+            'comments': comments_list,
+            'currentUser' : request.user,
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
