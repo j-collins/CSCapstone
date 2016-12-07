@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from . import models
 from . import forms
-from AuthenticationApp.models import MyUser
+from AuthenticationApp.models import MyUser, Professor
 
 
 def getUniversities(request):
@@ -190,12 +190,24 @@ def addCourse(request):
     #See if the user is a professor before adding the course.
     user_type = request.user.get_user_type()
     if (user_type == 'PROFESSOR'):
+
+        #Get the professor object and university.
+        professor = Professor.objects.get(user=request.user)
+        professor_university = professor.get_university()
+
+        #Get the university name from the url.
+        in_university_name = request.GET.get('name', 'None')
+        
+        #If the professor's university is not the url's university, show an error.
+        if (professor_university!=in_university_name):
+            #If the user is not a professor, show an error screen.
+            return render(request, 'professoruniversityerror.html')
+
         if request.user.is_authenticated():
             if request.method == 'POST':
                 form = forms.CourseForm(request.POST)
                 if form.is_valid():
-                    print "Form is valid!"
-                    in_university_name = request.GET.get('name', 'None')
+                    
                     in_university = models.University.objects.get(name__exact=in_university_name)
                     if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
                         return render(request, 'courseform.html', {'error' : 'Error: That course tag already exists at this university!'})
