@@ -1,13 +1,15 @@
 """GroupsApp Views
 Created by Naman Patwari on 10/10/2016.
 """
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import models
 from . import forms
 from AuthenticationApp.models import Student
 from ProjectsApp.models import Project
 from CompaniesApp.models import Company
 from django.shortcuts import get_object_or_404
+from GroupsApp.models import Group
+
 def getGroups(request):
     #if request.user in Student.objects.all():
         if request.user.is_authenticated():
@@ -174,5 +176,19 @@ def unjoinGroup(request):
             'userIsMember': False,
         }
         return render(request, 'group.html', context)
+    return render(request, 'autherror.html')
+
+def removeGroup(request):
+    if request.user.is_authenticated():
+        #Get the group object from the url.
+        group_name = request.GET.get('name', 'None')
+        group_object = models.Group.objects.get(name__exact=group_name)
+
+        #Delete the group.
+        group_object.delete()
+
+        #Redirect to the group list.
+        return redirect('/group/all')
+    # render error page if user is not logged in
     return render(request, 'autherror.html')
     

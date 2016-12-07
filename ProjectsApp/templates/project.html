@@ -23,6 +23,9 @@
             		{% else %}
             		<a href="/bookmark/create?name={{ project.name }}" class="btn btn-default">Bookmark</a>
             		{% endif %}
+            {% if userCanDelete %}
+            	<a href="/project/remove?name={{ project.name }}" class="btn btn-default">Delete Project</a>
+            {% endif %}
 		</div>
 	</div>
 {% endblock %}
