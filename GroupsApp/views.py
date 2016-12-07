@@ -81,9 +81,11 @@ def getGroup(request):
             #print ("universuty"+ university_name)
             if university_name is not None:
                 university = models.University.objects.get(name__exact=university_name) #this will break too
-                if university.members.filter(myuser_id__exact=request.user.id) and models.Professor.objects.filter(user_id__exact=request.user.id):
+                if university.members.filter(email__exact=request.user.email) and Professor.objects.filter(user_id__exact=request.user.id):
                     userIsTeacher = True
-        comments_list = Comment.objects.all()
+
+        comments_list = Comment.objects.filter(group_name__exact=in_group)
+
         context = {
             'group' : in_group,
             'userIsMember': is_member,
