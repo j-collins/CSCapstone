@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from . import models
 from . import forms
-from AuthenticationApp.models import MyUser
+from AuthenticationApp.models import MyUser, Professor
 
 
 def getUniversities(request):
@@ -162,7 +162,19 @@ def getCourse(request):
         user_type = request.user.get_user_type()
 
         if user_type == 'PROFESSOR' :
-            is_professor = True
+            #Now see if the current professor is the course professor.
+
+            #Get the professor object and university.
+            professor = Professor.objects.get(user=request.user)
+
+            #Get the current course professor.
+            course_professor = in_course.get_professor()
+
+            #See if the current professor is the same as the course professor.
+            if (str(professor) == str(course_professor)):
+                is_professor = True
+            else:
+                is_professor = False
         else:
             is_professor = False
 
@@ -170,7 +182,7 @@ def getCourse(request):
             'university' : in_university,
             'course' : in_course,
             'userInCourse' : is_member,
-            'userIsProfessor' : is_professor, 
+            'userIsCourseProfessor' : is_professor, 
         }
         return render(request, 'course.html', context)
     return render(request, 'autherror.html')
@@ -190,19 +202,31 @@ def addCourse(request):
     #See if the user is a professor before adding the course.
     user_type = request.user.get_user_type()
     if (user_type == 'PROFESSOR'):
+
+        #Get the professor object and university.
+        professor = Professor.objects.get(user=request.user)
+        professor_university = professor.get_university()
+
+        #Get the university name from the url.
+        in_university_name = request.GET.get('name', 'None')
+        
+        #If the professor's university is not the url's university, show an error.
+        if (str(professor_university) != str(in_university_name)):
+            #If the user is not a professor, show an error screen.
+            return render(request, 'professoruniversityerror.html')
+        
         if request.user.is_authenticated():
             if request.method == 'POST':
                 form = forms.CourseForm(request.POST)
                 if form.is_valid():
-                    print("Form is valid!")
-                    in_university_name = request.GET.get('name', 'None')
                     in_university = models.University.objects.get(name__exact=in_university_name)
                     if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
                         return render(request, 'courseform.html', {'error' : 'Error: That course tag already exists at this university!'})
                     new_course = models.Course(tag=form.cleaned_data['tag'],
                                                name=form.cleaned_data['name'],
                                                description=form.cleaned_data['description'],
-                                               university=in_university)
+                                               university=in_university,
+                                               professor=professor)
                     new_course.save()
                     in_university.course_set.add(new_course)
                     is_member = in_university.members.filter(email__exact=request.user.email)
