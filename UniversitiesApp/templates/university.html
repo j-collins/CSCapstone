@@ -47,7 +47,9 @@
 				</tbody>
 			</table>
 		</div>
-		<a href="/university/course/form?name={{ university.name }}" class="btn btn-default">Add a course</a>
+		{%if university == professor.university%}
+		<a href="/university/course/form?name={{ university.name }}" class="btn btn-default">Add a Course</a>
+		{%endif%}
 	</div>
 	
 {% endblock %}
