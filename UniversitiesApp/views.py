@@ -74,14 +74,26 @@ def manage(request):
             user_type = request.user.get_user_type()
 
             if user_type == 'PROFESSOR' :
-                is_professor = True
+                #Now see if the current professor is the course professor.
+
+                #Get the professor object and university.
+                professor = Professor.objects.get(user=request.user)
+
+                #Get the current course professor.
+                course_professor = course_object.get_professor()
+
+                #See if the current professor is the same as the course professor.
+                if (str(professor) == str(course_professor)):
+                    is_professor = True
+                else:
+                    is_professor = False
             else:
                 is_professor = False
 
             context = {
                 'university' : in_university,
                 'course' : course_object,
-                'userIsProfessor' : is_professor, 
+                'userIsCourseProfessor' : is_professor, 
             }
             return render(request, 'course.html', context)
 

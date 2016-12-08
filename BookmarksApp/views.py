@@ -99,11 +99,14 @@ def removeBookmark(request):
         
         user_object = models.MyUser.objects.get(email__exact=request.user.email)
 
-        #Get the bookmark_object using the user_object an project_object.
-        bookmark_object = models.Bookmark.objects.get(user=user_object, project=project_object)
+        try:
+            #Get the bookmark_object using the user_object an project_object.
+            bookmark_object = models.Bookmark.objects.get(user=user_object, project=project_object)
 
-        #Delete bookmark from database.
-        bookmark_object.delete()
+            #Delete bookmark from database.
+            bookmark_object.delete()
+        except:
+            bookmark_object = None
 
         #User has unbookmarked the project.
         user_has_bookmarked = False
