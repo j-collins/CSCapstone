@@ -32,4 +32,5 @@ class CourseUpdateForm(forms.ModelForm):
 	#Adds list of students on course update page. 
 	class Meta: 
 		model = Course
-		exclude = ['university']
+		exclude = ['university','professor']
+

@@ -6,6 +6,8 @@ BookmarksApp Views
 from django.shortcuts import render
 
 from . import models
+from CompaniesApp.models import Company
+from GroupsApp.models import Group
 
 
 # Create your views here.
@@ -42,18 +44,45 @@ def createBookmark(request):
 
         #Create a new bookmark with provided user_object and project_object.
         new_bookmark = models.Bookmark(user=user_object, project=project_object)
-
         #Save the bookmark in the database.
         new_bookmark.save()
-
         #The user has bookmarked the project.
         user_has_bookmarked = True
+        flag = False
+        company_id = project_object.company_id
+        company = Company.objects.get(id__exact=company_id)
+        if request.user.id == project_object.engineer_id and company.members.filter(email__exact=request.user.email).exists():
+            flag = True
+        group = False
+        groups_list = Group.objects.all()
+        for in_group in groups_list:
+            if in_group.members.filter(email__exact=request.user.email).exists():
+                group = True
+        try:
+            # Get the engineer object for the user.
+            engineer_object = models.Engineer.objects.get(user__exact=request.user)
+
+            # Get the company for the engineer.
+            engineer_company = engineer_object.get_company()
+
+            project_company = in_project.get_company()
+
+            if (str(engineer_company) == str(project_company)):
+                user_can_delete = True
+            else:
+                user_can_delete = False
+        except:
+                engineer_object = None
+                user_can_delete = False
 
         #Context updated to include project_object and variable for if user has bookmarked
         #the project.
         context = {
             'project' : project_object,
             'userHasBookmarked' : user_has_bookmarked,
+            'userIsMember': flag,
+            'in_group': group,
+            'userCanDelete': user_can_delete,
         }
         #Render using project.htlm file from ProjectsApp.
         return render(request, 'project.html', context)
@@ -79,9 +108,40 @@ def removeBookmark(request):
         #User has unbookmarked the project.
         user_has_bookmarked = False
 
+        flag = False
+        company_id = project_object.company_id
+        company = Company.objects.get(id__exact=company_id)
+        if request.user.id == project_object.engineer_id and company.members.filter(
+                email__exact=request.user.email).exists():
+            flag = True
+        group = False
+        groups_list = Group.objects.all()
+        for in_group in groups_list:
+            if in_group.members.filter(email__exact=request.user.email).exists():
+                group = True
+        try:
+            # Get the engineer object for the user.
+            engineer_object = models.Engineer.objects.get(user__exact=request.user)
+
+            # Get the company for the engineer.
+            engineer_company = engineer_object.get_company()
+
+            project_company = in_project.get_company()
+
+            if (str(engineer_company) == str(project_company)):
+                user_can_delete = True
+            else:
+                user_can_delete = False
+        except:
+            engineer_object = None
+            user_can_delete = False
+
         context = {
             'project' : project_object,
-            'userHasBookmarked': user_has_bookmarked,
+            'userHasBookmarked' : user_has_bookmarked,
+            'userIsMember': flag,
+            'in_group': group,
+            'userCanDelete': user_can_delete,
         }
         return render(request, 'project.html', context)
     return render(request, 'autherror.html')

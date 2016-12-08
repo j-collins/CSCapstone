@@ -3,14 +3,10 @@ Created by Harris Christiansen on 10/02/16.
 """
 from django.shortcuts import render, redirect
 from . import forms
-
 from . import models
 from . import forms
 from django.contrib import messages
-
 from GroupsApp.models import Group
-
-
 from BookmarksApp.models import Bookmark
 
 
@@ -22,17 +18,16 @@ def getProjects(request):
 
 def getProject(request):
     if request.user.is_authenticated():
-
         in_name = request.GET.get('name', 'None')
-
         print(in_name)
-
         in_project = models.Project.objects.get(name__exact=in_name)
         #Get the user_object by searching for the exact email.
         user_object = models.MyUser.objects.get(email__exact=request.user.email)
 
         flag = False
-        if request.user.id == in_project.engineer_id:
+        company_id = in_project.company_id
+        company = models.Company.objects.get(id__exact=company_id)
+        if request.user.id == in_project.engineer_id or company.members.filter(email__exact=request.user.email).exists():
             flag = True
         group = False
         groups_list = Group.objects.all()
